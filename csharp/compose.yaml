@@ -1,0 +1,7 @@
+﻿services:
+  graphlabeling:
+    image: graphlabeling
+    build:
+      context: .
+      dockerfile: GraphLabeling/Dockerfile
+
