@@ -4,7 +4,6 @@ namespace GraphLabeling;
 
 public class GraphLabeler
 {
-    readonly int vertexCount;
     readonly int[][] adjList;
     readonly int[] labels;
 
@@ -13,19 +12,19 @@ public class GraphLabeler
 
     public HashSet<int> edgeSet { get; private set; } = [];
     
-    public GraphLabeler(int[][] adjList, int vertexCount)
+    public GraphLabeler(int[][] adjList)
     {
         this.adjList = adjList;
-        this.vertexCount = vertexCount;
-        labels = new int[vertexCount];
+        labels = new int[adjList.Length];
     }
 
     public int[] SolveLabels()
     {
-        // TODO: Prioritize by lowest label then by largest number of labeled adjacent nodes. 
-        //       Use OrderedDictionary of labeled frontier nodes, then 
+        // TODO: Potential optimization:
+        //       Prioritize first by lowest label *then* by largest number of labeled adjacent nodes. 
+        //       In C# use OrderedDictionary of labeled frontier nodes keyed by label, then SortedSet?
         var frontier = new PriorityQueue<int, int> ();
-        labels[0] = 1; // first label to be 1
+        labels[0] = 1; // Set first vertex label to be 1
         for (int i = 0; i < adjList[0].Length; i++)
             frontier.Enqueue(adjList[0][i], 1); // Add starting vertexes
 
@@ -98,7 +97,7 @@ public class GraphLabeler
             // Try max weight
             while (newLabel is null)
             {
-                // Note: labelsOfAdjNodes[0] *should* be the smallest
+                // Note: labelsOfAdjNodes[0] *should* be the smallest for efficiency
                 int potentialLabel = nextLargestWeight - adjLabels[0];
 
                 if (CheckLabel(potentialLabel, currentVertexId, adjLabels))
@@ -116,7 +115,7 @@ public class GraphLabeler
             
             // Assert new label must not be null
             if (newLabel is null || newLabel == 0)
-                throw new ApplicationException("Valid label not found!");
+                throw new ApplicationException("No valid label found!");
 
             // Set new label
             labels[currentVertexId] = (int)newLabel;
@@ -161,6 +160,7 @@ public class GraphLabeler
         return true;
     }
 
+    // returns True if a duplicate exists; False if no duplicate was found.
     bool CheckTwoDegreeDuplicate(int potentialLabel, int vertexIndex)
     {
         foreach (int firstNeighborIndex in adjList[vertexIndex])

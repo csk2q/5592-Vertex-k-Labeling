@@ -7,48 +7,50 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, GraphLabeling!");
-        
 
-
+        // _ = RunOnce(1, true);
+        RunRange(1, 3);
 
     }
 
-    static int[] RunOnce(int chainLength)
+    static int[] RunOnce(int chainLength, bool printGraph = false)
     {
         Stopwatch sw = Stopwatch.StartNew();
 
         var graph = GraphBuilder.ExtendGraph(GraphData.P2Graph2AdjList, 2, 0, chainLength);
 
-        var labeler = new GraphLabeler(graph, graph.Length);
+        var labeler = new GraphLabeler(graph);
 
         var labels = labeler.SolveLabels();
         
         Console.WriteLine($"Min-k: {Math.Ceiling(((double) chainLength * 15 + 1)/2)}, Max-Label: {labels.Max()}");
-        
-        sw.Stop();
-        
-        /*Console.Write("Labels: ");
-        foreach (var label in labels)
-            Console.Write(label + ",");
-        Console.WriteLine();
-        
-        Console.Write("Edges: ");
-        foreach (var edge in labeler.edgeSet)
-            Console.Write(edge + ",");
-        Console.WriteLine();*/
 
-        
-        // var mermaid = MermaidGraph.GenerateMermaidGraph(graph, labels);
-        // var mermaid = MermaidGraph.GenerateMermaidGraph(graph);
-        
-        /*Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine(mermaid);
-        
-        Console.WriteLine();
-        Console.WriteLine(sw.Elapsed);*/
-        Console.WriteLine(labels.Max());
+        sw.Stop();
+
+        if (printGraph)
+        {
+            Console.Write("Labels: ");
+            foreach (var label in labels)
+                Console.Write(label + ",");
+            Console.WriteLine();
+
+            Console.Write("Edges: ");
+            foreach (var edge in labeler.edgeSet)
+                Console.Write(edge + ",");
+            Console.WriteLine();
+
+
+            var mermaid = MermaidGraph.GenerateMermaidGraph(graph, labels);
+            // var mermaid = MermaidGraph.GenerateMermaidGraph(graph);
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(mermaid);
+
+            Console.WriteLine();
+            Console.WriteLine(sw.Elapsed);
+        }
 
         HashSet<int> edgeSet = new HashSet<int>();
         foreach (int edge in labeler.edgeSet)
@@ -64,7 +66,7 @@ class Program
         {
             var graph = GraphBuilder.ExtendGraph(GraphData.P2Graph2AdjList, 2, 0, i);
 
-            var labeler = new GraphLabeler(graph, graph.Length);
+            var labeler = new GraphLabeler(graph);
 
             var labels = labeler.SolveLabels();
             
