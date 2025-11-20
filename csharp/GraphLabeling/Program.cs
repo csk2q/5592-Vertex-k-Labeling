@@ -8,8 +8,8 @@ class Program
     {
         Console.WriteLine("Hello, GraphLabeling!");
 
-        // _ = RunOnce(1, true);
-        RunRange(1, 3);
+        _ = RunOnce(300, false);
+        // RunRange(1, 3);
 
     }
 
