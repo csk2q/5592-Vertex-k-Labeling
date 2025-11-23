@@ -8,7 +8,7 @@ class Program
     {
         Console.WriteLine("Hello, GraphLabeling!");
 
-        _ = RunOnce(300, false);
+        _ = RunOnce(10000, false);
         // RunRange(1, 3);
 
     }
@@ -51,6 +51,8 @@ class Program
             Console.WriteLine();
             Console.WriteLine(sw.Elapsed);
         }
+        else
+            Console.WriteLine(sw.Elapsed);
 
         HashSet<int> edgeSet = new HashSet<int>();
         foreach (int edge in labeler.edgeSet)
